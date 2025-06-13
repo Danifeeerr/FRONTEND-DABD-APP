@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import ManagementAlumno from './ManagementAlumno';
 import ManagmentGrupo from './ManagmentGrupo';
 import ManagmentMatricula from './ManagmentMatricula';
 
 function TrainerDashboard() {
   const [seccion, setSeccion] = useState('alumnos');
+  const navigate = useNavigate();
 
   const renderContenido = () => {
     switch (seccion) {
@@ -35,6 +37,7 @@ function TrainerDashboard() {
         <button onClick={() => setSeccion('alumnos')}>Gestionar Alumnos</button>
         <button onClick={() => setSeccion('grupos')}>Gestionar Grupos</button>
         <button onClick={() => setSeccion('matriculas')}>Gestionar Matrículas</button>
+        <button onClick={() => navigate('/perfil')} style={{ marginRight: '1rem' }}>Ver Perfil</button>
       </div>
 
       <div style={{ width: '100%', maxWidth: '800px' }}>{renderContenido()}</div>

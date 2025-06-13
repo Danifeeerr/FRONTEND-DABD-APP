@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import Login from './pages/Login.jsx';
 import TrainerDashboard from './pages/TrainerDashboard.jsx';
+import TrainerProfile from './pages/TrainerProfile.jsx';
 import './App.css';
 
 // Pantalla de inicio con botón al login
@@ -36,6 +37,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<TrainerDashboard />} />
+        <Route path="/perfil" element={<TrainerProfile />} />
       </Routes>
     </BrowserRouter>
   );
