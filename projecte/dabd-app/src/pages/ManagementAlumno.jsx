@@ -77,7 +77,7 @@ function AlumnoManager() {
 
   return (
     <div>
-      <h3>Gestión de Alumnos</h3>
+      <h3>Gestió d'alumnes</h3>
 
       <button
         onClick={() => {
@@ -92,13 +92,13 @@ function AlumnoManager() {
         }}
         style={{ marginBottom: '1rem' }}
       >
-        {mostrarFormulario ? 'Cancelar' : 'Añadir alumno'}
+        {mostrarFormulario ? 'Cancelar' : 'Afegir alumne'}
       </button>
 
       {mostrarFormulario && (
         <form onSubmit={handleCrear} style={{ marginBottom: '2rem' }}>
           <div>
-            <label>Usuario: </label>
+            <label>Usuari: </label>
             <input
               type="text"
               name="usuario"
@@ -108,7 +108,7 @@ function AlumnoManager() {
             />
           </div>
           <div>
-            <label>Fecha de nacimiento: </label>
+            <label>Data de naixement: </label>
             <input
               type="date"
               name="fechaNacimiento"
@@ -118,7 +118,7 @@ function AlumnoManager() {
             />
           </div>
           <div>
-            <label>Escuela: </label>
+            <label>Escola: </label>
             <input
               type="text"
               name="escuela"
@@ -146,11 +146,11 @@ function AlumnoManager() {
       <table border="1" cellPadding="8" style={{ width: '100%', textAlign: 'left' }}>
         <thead>
           <tr>
-            <th>Usuario</th>
-            <th>Fecha de nacimiento</th>
-            <th>Escuela</th>
+            <th>Usuari</th>
+            <th>Data de naixement</th>
+            <th>Escola</th>
             <th>DNI Tutor Legal</th>
-            <th>Acciones</th>
+            <th>Accions</th>
           </tr>
         </thead>
         <tbody>
@@ -161,15 +161,15 @@ function AlumnoManager() {
               <td>{alumno.escuela}</td>
               <td>{alumno.dniTutor}</td>
               <td>
-                <button onClick={() => handleEditar(alumno)}>Editar</button>{' '}
-                <button onClick={() => handleEliminar(alumno.id)}>Eliminar</button>
+                <button onClick={() => handleEditar(alumno)}>Edita</button>{' '}
+                <button onClick={() => handleEliminar(alumno.id)}>Elimina</button>
               </td>
             </tr>
           ))}
           {alumnos.length === 0 && (
             <tr>
               <td colSpan="5" style={{ textAlign: 'center' }}>
-                No hay alumnos registrados.
+                No hi ha alumnes registrats.
               </td>
             </tr>
           )}

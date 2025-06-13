@@ -38,7 +38,7 @@ function Login() {
         height: '100vh',
       }}
     >
-      <h2>Iniciar sesión</h2>
+      <h2>Inici de Sessió</h2>
       <form
         onSubmit={handleSubmit}
         style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '300px' }}
@@ -55,7 +55,7 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Entrar</button>
+        <button type="submit">Iniciar Sessió</button>
       </form>
       {error && <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>}
     </div>

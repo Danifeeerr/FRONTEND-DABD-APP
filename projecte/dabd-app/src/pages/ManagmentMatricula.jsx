@@ -96,7 +96,7 @@ function MatriculaManager() {
 
   return (
     <div>
-      <h3>Gestión de Matrículas</h3>
+      <h3>Gestió de Matrícules</h3>
 
       <button onClick={() => {
         setMostrarFormulario(!mostrarFormulario);
@@ -113,40 +113,40 @@ function MatriculaManager() {
           comentarioTrainer: '',
         });
       }}>
-        {mostrarFormulario ? 'Cancelar' : 'Añadir matrícula'}
+        {mostrarFormulario ? 'Cancelar' : 'Afegir matrícula'}
       </button>
 
       {mostrarFormulario && (
         <form onSubmit={handleCrear} style={{ marginTop: '1rem', marginBottom: '2rem' }}>
           <div>
-            <label>Alumno: </label>
+            <label>Alumne: </label>
             <input name="alumno" value={form.alumno} onChange={handleInputChange} required />
           </div>
           <div>
-            <label>ID Grupo: </label>
+            <label>ID Grup: </label>
             <input type="number" name="grupoId" value={form.grupoId} onChange={handleInputChange} required />
           </div>
           <div>
-            <label>Inicio matrícula: </label>
+            <label>Inici matrícula: </label>
             <input type="date" name="fechaInicio" value={form.fechaInicio} onChange={handleInputChange} required />
           </div>
           <div>
-            <label>Fin matrícula: </label>
+            <label>Fi matrícula: </label>
             <input type="date" name="fechaFin" value={form.fechaFin} onChange={handleInputChange} required />
           </div>
           <div>
-            <label>Estado: </label>
+            <label>Estat: </label>
             <select name="estado" value={form.estado} onChange={handleInputChange}>
               <option value="activa">Activa</option>
-              <option value="finalizada">Finalizada</option>
+              <option value="finalitzada">Finalitzada</option>
             </select>
           </div>
           <div>
-            <label>Precio (€): </label>
+            <label>Preu (€): </label>
             <input type="number" name="precio" value={form.precio} onChange={handleInputChange} required />
           </div>
           <div>
-            <label>Descuento (%): </label>
+            <label>Descompte (%): </label>
             <input
               type="number"
               name="descuento"
@@ -167,7 +167,7 @@ function MatriculaManager() {
             />
           </div>
           <div>
-            <label>Comentario del trainer: </label>
+            <label>Comentari del trainer: </label>
             <input name="comentarioTrainer" value={form.comentarioTrainer} onChange={handleInputChange} />
           </div>
           <button type="submit">{modoEdicion ? 'Guardar cambios' : 'Crear matrícula'}</button>
@@ -177,16 +177,16 @@ function MatriculaManager() {
       <table border="1" cellPadding="8" style={{ width: '100%', textAlign: 'left' }}>
         <thead>
           <tr>
-            <th>Alumno</th>
-            <th>ID Grupo</th>
-            <th>Inicio</th>
-            <th>Fin</th>
-            <th>Estado</th>
-            <th>Precio</th>
-            <th>Descuento</th>
+            <th>Alumne</th>
+            <th>ID Grup</th>
+            <th>Inici</th>
+            <th>Fi</th>
+            <th>Estat</th>
+            <th>Preu</th>
+            <th>Descompte</th>
             <th>Nota</th>
-            <th>Comentario Trainer</th>
-            <th>Acciones</th>
+            <th>Comentari Trainer</th>
+            <th>Accions</th>
           </tr>
         </thead>
         <tbody>
@@ -202,14 +202,14 @@ function MatriculaManager() {
               <td>{m.nota}</td>
               <td>{m.comentarioTrainer}</td>
               <td>
-                <button onClick={() => handleEditar(m)}>Editar</button>
-                <button onClick={() => handleEliminar(m.id)}>Eliminar</button>
+                <button onClick={() => handleEditar(m)}>Edita</button>
+                <button onClick={() => handleEliminar(m.id)}>Elimina</button>
               </td>
             </tr>
           ))}
           {matriculas.length === 0 && (
             <tr>
-              <td colSpan="10" style={{ textAlign: 'center' }}>No hay matrículas registradas.</td>
+              <td colSpan="10" style={{ textAlign: 'center' }}>No hi ha matrícules registrades.</td>
             </tr>
           )}
         </tbody>

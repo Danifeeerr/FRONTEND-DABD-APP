@@ -17,7 +17,7 @@ function TrainerDashboard() {
       case 'matriculas':
         return <ManagmentMatricula />;
       default:
-        return <p>Selecciona una sección</p>;
+        return <p>Selecciona un camp que gestionar</p>;
     }
   };
 
@@ -34,10 +34,10 @@ function TrainerDashboard() {
       <h2>Panel del Trainer</h2>
 
       <div style={{ margin: '2rem 0', display: 'flex', gap: '1rem' }}>
-        <button onClick={() => setSeccion('alumnos')}>Gestionar Alumnos</button>
-        <button onClick={() => setSeccion('grupos')}>Gestionar Grupos</button>
+        <button onClick={() => setSeccion('alumnos')}>Gestionar Alumnes</button>
+        <button onClick={() => setSeccion('grupos')}>Gestionar Grups</button>
         <button onClick={() => setSeccion('matriculas')}>Gestionar Matrículas</button>
-        <button onClick={() => navigate('/perfil')} style={{ marginRight: '1rem' }}>Ver Perfil</button>
+        <button onClick={() => navigate('/perfil')} style={{ marginRight: '1rem' }}>Perfil</button>
       </div>
 
       <div style={{ width: '100%', maxWidth: '800px' }}>{renderContenido()}</div>

@@ -92,7 +92,7 @@ function GrupoManager() {
 
   return (
     <div>
-      <h3>Gestión de Grupos</h3>
+      <h3>Gestió de Grups</h3>
 
       <button
         onClick={() => {
@@ -109,7 +109,7 @@ function GrupoManager() {
         }}
         style={{ marginBottom: '1rem' }}
       >
-        {mostrarFormulario ? 'Cancelar' : 'Añadir grupo'}
+        {mostrarFormulario ? 'Cancelar' : 'Afegir grup'}
       </button>
 
       {mostrarFormulario && (
@@ -119,15 +119,15 @@ function GrupoManager() {
             <input type="text" name="dia" value={formGrupo.dia} onChange={handleInputChange} required />
           </div>
           <div>
-            <label>Hora inicio: </label>
+            <label>Hora d'inici: </label>
             <input type="time" name="horaInicio" value={formGrupo.horaInicio} onChange={handleInputChange} required />
           </div>
           <div>
-            <label>Hora fin: </label>
+            <label>Hora de fi: </label>
             <input type="time" name="horaFin" value={formGrupo.horaFin} onChange={handleInputChange} required />
           </div>
           <div>
-            <label>Código de grupo: </label>
+            <label>Codi del grup: </label>
             <input type="text" name="codigo" value={formGrupo.codigo} onChange={handleInputChange} required />
           </div>
           <div>
@@ -146,12 +146,12 @@ function GrupoManager() {
         <thead>
           <tr>
             <th>Día</th>
-            <th>Hora inicio</th>
-            <th>Hora fin</th>
-            <th>Código</th>
+            <th>Hora d'inici</th>
+            <th>Hora de fi</th>
+            <th>Codi del grup</th>
             <th>Trainer</th>
             <th>Aula</th>
-            <th>Acciones</th>
+            <th>Accions</th>
           </tr>
         </thead>
         <tbody>
@@ -164,15 +164,15 @@ function GrupoManager() {
               <td>{grupo.trainer}</td>
               <td>{grupo.aula}</td>
               <td>
-                <button onClick={() => handleEditar(grupo)}>Editar</button>{' '}
-                <button onClick={() => handleEliminar(grupo.id)}>Eliminar</button>
+                <button onClick={() => handleEditar(grupo)}>Edita</button>{' '}
+                <button onClick={() => handleEliminar(grupo.id)}>Elimina</button>
               </td>
             </tr>
           ))}
           {grupos.length === 0 && (
             <tr>
               <td colSpan="7" style={{ textAlign: 'center' }}>
-                No hay grupos registrados.
+                No hi ha grups registrats.
               </td>
             </tr>
           )}

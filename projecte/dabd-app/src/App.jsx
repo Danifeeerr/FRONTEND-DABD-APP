@@ -18,12 +18,12 @@ function Home() {
         alignItems: 'center',
       }}
     >
-      <h1>Bienvenido a UPC School App</h1>
+      <h1>Benvinguts a UPC School App</h1>
       <button
         onClick={() => navigate('/login')}
         style={{ marginTop: '2rem', padding: '1rem 2rem', fontSize: '1rem' }}
       >
-        Ir al Login
+        Iniciar Sessió
       </button>
     </div>
   );

@@ -13,11 +13,11 @@ function TrainerProfile() {
   return (
     <div>
       <h2>Perfil del Trainer</h2>
-      <p><strong>Nombre:</strong> {trainer.nombre}</p>
+      <p><strong>Nom:</strong> {trainer.nombre}</p>
       <p><strong>Email:</strong> {trainer.email}</p>
 
       <button onClick={() => navigate('/dashboard')} style={{ marginTop: '1rem' }}>
-        Volver al Dashboard
+        Tornar al Dashboard
       </button>
     </div>
   );
