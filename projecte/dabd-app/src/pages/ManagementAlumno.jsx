@@ -1,128 +1,173 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function AlumnoManager() {
-  const [alumnos, setAlumnos] = useState([
-    {
-      id: 1,
-      usuario: 'claudia123',
-      fechaNacimiento: '2010-05-12',
-      escuela: 'Escola Sagrada Família',
-      dniTutor: '12345678A',
-    },
-    {
-      id: 2,
-      usuario: 'javier_lopez',
-      fechaNacimiento: '2009-11-03',
-      escuela: 'Institut Ramon Llull',
-      dniTutor: '87654321B',
-    },
-  ]);
-
+  const [alumnos, setAlumnos] = useState([]);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
-  const [modoEdicion, setModoEdicion] = useState(false);
-  const [alumnoEditandoId, setAlumnoEditandoId] = useState(null);
-
-  const [formAlumno, setFormAlumno] = useState({
+  const [editandoUsuario, setEditandoUsuario] = useState(null);
+  const [nuevoAlumno, setNuevoAlumno] = useState({
     usuario: '',
     fechaNacimiento: '',
     escuela: '',
     dniTutor: '',
   });
 
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchAlumnos();
+  }, []);
+
+  const fetchAlumnos = async () => {
+    try {
+      const res = await fetch('http://127.0.0.1:8000/alumnes');
+      if (!res.ok) throw new Error('Error al cargar alumnos');
+      const data = await res.json();
+      setAlumnos(data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormAlumno((prev) => ({ ...prev, [name]: value }));
+    setNuevoAlumno((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCrear = (e) => {
+  const handleCrearOActualizar = async (e) => {
     e.preventDefault();
+    setError(null);
 
-    if (modoEdicion) {
-      setAlumnos((prev) =>
-        prev.map((alumno) =>
-          alumno.id === alumnoEditandoId ? { ...formAlumno, id: alumno.id } : alumno
-        )
-      );
-      setModoEdicion(false);
-      setAlumnoEditandoId(null);
-    } else {
-      const alumnoConId = { ...formAlumno, id: Date.now() };
-      setAlumnos((prev) => [...prev, alumnoConId]);
+    try {
+      if (editandoUsuario) {
+        // ACTUALIZAR ALUMNO
+        const res = await fetch(`http://127.0.0.1:8000/alumneUpdate/${editandoUsuario}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            usuari: editandoUsuario,
+            data_naixement: nuevoAlumno.fechaNacimiento,
+            escola: nuevoAlumno.escuela,
+            dni_tutor: nuevoAlumno.dniTutor,
+          }),
+        });
+
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || 'Error al actualizar alumno');
+        }
+      } else {
+        // CREAR NUEVO ALUMNO
+        const personaRes = await fetch('http://127.0.0.1:8000/personaInsert', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            usuari: nuevoAlumno.usuario,
+            contrassenya: '1234',
+          }),
+        });
+
+        if (!personaRes.ok) {
+          const err = await personaRes.json();
+          throw new Error(err.detail || 'Error al crear persona');
+        }
+
+        const alumneRes = await fetch('http://127.0.0.1:8000/alumneInsert', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            usuari: nuevoAlumno.usuario,
+            data_naixement: nuevoAlumno.fechaNacimiento,
+            escola: nuevoAlumno.escuela,
+            dni_tutor: nuevoAlumno.dniTutor,
+          }),
+        });
+
+        if (!alumneRes.ok) {
+          const err = await alumneRes.json();
+          throw new Error(err.detail || 'Error al crear alumno');
+        }
+      }
+
+      await fetchAlumnos();
+      setNuevoAlumno({ usuario: '', fechaNacimiento: '', escuela: '', dniTutor: '' });
+      setMostrarFormulario(false);
+      setEditandoUsuario(null);
+    } catch (err) {
+      setError(err.message);
     }
-
-    setFormAlumno({
-      usuario: '',
-      fechaNacimiento: '',
-      escuela: '',
-      dniTutor: '',
-    });
-    setMostrarFormulario(false);
-  };
-
-  const handleEliminar = (id) => {
-    setAlumnos((prev) => prev.filter((a) => a.id !== id));
   };
 
   const handleEditar = (alumno) => {
-    setFormAlumno({
-      usuario: alumno.usuario,
-      fechaNacimiento: alumno.fechaNacimiento,
-      escuela: alumno.escuela,
-      dniTutor: alumno.dniTutor,
+    setNuevoAlumno({
+      usuario: alumno.usuari,
+      fechaNacimiento: alumno.data_naixement,
+      escuela: alumno.escola || '',
+      dniTutor: alumno.dni_tutor || '',
     });
-    setModoEdicion(true);
-    setAlumnoEditandoId(alumno.id);
+    setEditandoUsuario(alumno.usuari);
     setMostrarFormulario(true);
+  };
+
+  const handleEliminar = async (usuari) => {
+    if (!window.confirm('¿Seguro que quieres eliminar este alumno?')) return;
+
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/alumneDelete/${usuari}`, {
+        method: 'POST',
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.detail || 'Error al eliminar alumno');
+      }
+
+      await fetchAlumnos();
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
     <div>
-      <h3>Gestió d'alumnes</h3>
+      <h3>Gestión de Alumnos</h3>
 
-      <button
-        onClick={() => {
-          setMostrarFormulario(!mostrarFormulario);
-          setModoEdicion(false);
-          setFormAlumno({
-            usuario: '',
-            fechaNacimiento: '',
-            escuela: '',
-            dniTutor: '',
-          });
-        }}
-        style={{ marginBottom: '1rem' }}
-      >
-        {mostrarFormulario ? 'Cancelar' : 'Afegir alumne'}
+      <button onClick={() => {
+        setMostrarFormulario(!mostrarFormulario);
+        setEditandoUsuario(null);
+        setNuevoAlumno({ usuario: '', fechaNacimiento: '', escuela: '', dniTutor: '' });
+      }} style={{ marginBottom: '1rem' }}>
+        {mostrarFormulario ? 'Cancelar' : 'Añadir alumno'}
       </button>
 
       {mostrarFormulario && (
-        <form onSubmit={handleCrear} style={{ marginBottom: '2rem' }}>
+        <form onSubmit={handleCrearOActualizar} style={{ marginBottom: '2rem' }}>
           <div>
-            <label>Usuari: </label>
+            <label>Usuario: </label>
             <input
               type="text"
               name="usuario"
-              value={formAlumno.usuario}
+              value={nuevoAlumno.usuario}
               onChange={handleInputChange}
               required
+              disabled={!!editandoUsuario}
             />
           </div>
           <div>
-            <label>Data de naixement: </label>
+            <label>Fecha de nacimiento: </label>
             <input
               type="date"
               name="fechaNacimiento"
-              value={formAlumno.fechaNacimiento}
+              value={nuevoAlumno.fechaNacimiento}
               onChange={handleInputChange}
               required
             />
           </div>
           <div>
-            <label>Escola: </label>
+            <label>Escuela: </label>
             <input
               type="text"
               name="escuela"
-              value={formAlumno.escuela}
+              value={nuevoAlumno.escuela}
               onChange={handleInputChange}
               required
             />
@@ -132,45 +177,42 @@ function AlumnoManager() {
             <input
               type="text"
               name="dniTutor"
-              value={formAlumno.dniTutor}
+              value={nuevoAlumno.dniTutor}
               onChange={handleInputChange}
               required
             />
           </div>
-          <button type="submit">
-            {modoEdicion ? 'Guardar cambios' : 'Guardar alumno'}
-          </button>
+          <button type="submit">{editandoUsuario ? 'Guardar cambios' : 'Guardar alumno'}</button>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
         </form>
       )}
 
       <table border="1" cellPadding="8" style={{ width: '100%', textAlign: 'left' }}>
         <thead>
           <tr>
-            <th>Usuari</th>
-            <th>Data de naixement</th>
-            <th>Escola</th>
+            <th>Usuario</th>
+            <th>Fecha de nacimiento</th>
+            <th>Escuela</th>
             <th>DNI Tutor Legal</th>
-            <th>Accions</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           {alumnos.map((alumno) => (
-            <tr key={alumno.id}>
-              <td>{alumno.usuario}</td>
-              <td>{alumno.fechaNacimiento}</td>
-              <td>{alumno.escuela}</td>
-              <td>{alumno.dniTutor}</td>
+            <tr key={alumno.usuari}>
+              <td>{alumno.usuari}</td>
+              <td>{alumno.data_naixement}</td>
+              <td>{alumno.escola}</td>
+              <td>{alumno.dni_tutor}</td>
               <td>
-                <button onClick={() => handleEditar(alumno)}>Edita</button>{' '}
-                <button onClick={() => handleEliminar(alumno.id)}>Elimina</button>
+                <button onClick={() => handleEditar(alumno)}>Editar</button>
+                <button onClick={() => handleEliminar(alumno.usuari)} style={{ marginLeft: '0.5rem' }}>Eliminar</button>
               </td>
             </tr>
           ))}
           {alumnos.length === 0 && (
             <tr>
-              <td colSpan="5" style={{ textAlign: 'center' }}>
-                No hi ha alumnes registrats.
-              </td>
+              <td colSpan="5" style={{ textAlign: 'center' }}>No hay alumnos registrados.</td>
             </tr>
           )}
         </tbody>
